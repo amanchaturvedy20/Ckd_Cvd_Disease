@@ -1,0 +1,11 @@
+{ 
+  "age": 70, 
+  "gender": "Male", 
+  "diabetes": 1, 
+  "hypertension": 1, 
+  "cholesterol": 260, 
+  "blood_pressure": 160, 
+  "creatinine": 2.5, 
+  "eGFR": 30, 
+  "history_of_cvd": 1
+}

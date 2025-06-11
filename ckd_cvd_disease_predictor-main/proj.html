@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKD-CVD Risk Analysis</title>
+  <link rel="stylesheet" href="./proj.css">
+  <style>
+    /* Optional inline styles if you haven't added to proj.css */
+    .login-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f9f9f9;
+    }
+
+    .login-container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .login-container input {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .login-button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .login-button:hover {
+      background-color: #0056b3;
+    }
+
+    #main-content {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Section -->
+  <section id="login-section" class="login-section">
+    <div class="login-container">
+      <h2>Welcome to RENO</h2>
+      <p>Please log in to continue</p>
+      <form id="login-form">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit" class="login-button">Login</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Main Page Content -->
+  <div id="main-content">
+    <header class="header">
+      <div class="logo">RENO</div>
+      <nav class="navbar">
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#team">Team</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main class="main-content">
+      <section class="hero">
+        <div class="hero-text">
+          <h1>Predict and Prevent with Advanced Insights</h1>
+          <p>Our system leverages machine learning to enhance early detection and management of CKD and CVD risks.</p>
+          <button class="cta-button" id="predict-btn">Get Started</button>
+        </div>
+        
+        <div class="hero-image">
+          <img src="https://www.revivaclinic.com/wp-content/uploads/2017/09/bundle-pricing-sfw.jpg" alt="Analysis Illustration">
+        </div>
+      </section>
+
+      <section id="features" class="features-section">
+        <h2>Key Features</h2>
+        <div class="features">
+          <div class="feature" id="img1">
+            <img src="https://pub.mdpi-res.com/applsci/applsci-13-02885/article_deploy/html/images/applsci-13-02885-g001.png?1677236206" alt="data integration">
+            <h3>Data Integration</h3>
+            <p>Seamlessly integrate and preprocess patient data for enhanced accuracy.</p>
+          </div>
+          <div class="feature" id="img2">
+            <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTeaTnqhUiwqq0--Yuu5eYziyBiqHQc5uCV4eUPiJCWgk8Q7bjq" alt="ai model">
+            <h3>AI Modeling</h3>
+            <p>Train and implement predictive models tailored for CKD and CVD risks.</p>
+          </div>
+          <div class="feature" id="img3">
+            <img src="https://cdn2.iconfinder.com/data/icons/medical-13-1/512/xxx010-512.png" alt="Dashboard">
+            <h3>Interactive Dashboard</h3>
+            <p>Visualize results, trends, and actionable insights in a user-friendly interface.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="team" class="team-section">
+        <h2>Our Team</h2>
+        <p>Meet the experts driving innovation in healthcare analytics.</p>
+      </section>
+
+      <section id="prediction-result" class="team-section">
+        <div id="result" style="display: none; background: #f1f1f1; padding: 20px; border-radius: 8px;">
+          <!-- Prediction result will be displayed here -->
+        </div>
+      </section>    
+    </main>
+
+    <footer class="footer">
+      <p>© 2025 CKD-CVD Analysis Project | All Rights Reserved</p>
+    </footer>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Handle Login
+    document.getElementById("login-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (email && password) {
+        // Simulate successful login
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("main-content").style.display = "block";
+      }
+    });
+
+    // Handle Prediction
+    document.getElementById("predict-btn").addEventListener("click", () => {
+      fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          input: Array(10).fill().map((_, i) => Array(57).fill((i + 2) / 10))
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        const resultDiv = document.getElementById("result");
+        if (data.error) {
+          resultDiv.innerHTML = `<h3>Error</h3><p>${data.error}</p>`;
+        } else {
+          resultDiv.innerHTML = `
+            <h3>Prediction Result</h3>
+            <p><strong>Prediction:</strong> ${data.prediction}</p>
+            <p><strong>Probability:</strong> ${data.probability.toFixed(4)}</p>
+          `;
+        }
+        resultDiv.style.display = "block";
+      })
+      .catch(error => {
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `<h3>Error</h3><p>Prediction failed: ${error.message}</p>`;
+        resultDiv.style.display = "block";
+        console.error("Error:", error);
+      });
+    });
+  </script>
+</body>
+</html>
+
+

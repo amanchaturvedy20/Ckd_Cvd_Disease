@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Prediction Result</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900 p-10">
+  <div class="max-w-xl mx-auto bg-white shadow-md rounded-lg p-8">
+    <h1 class="text-2xl font-bold mb-6 text-center">CKD-CVD Prediction Result</h1>
+
+    <!-- User Info -->
+    <div class="mb-6">
+      <p><strong>Name:</strong> {{ user.name }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Gender:</strong> {{ user.gender }}</p>
+    </div>
+
+    <!-- Prediction Result -->
+    <div id="result-box" class="p-6 rounded-lg mb-6">
+      <p class="text-lg"><strong>Risk Level:</strong> <span id="risk-level">{{ result.prediction }}</span></p>
+      <p class="text-lg"><strong>Probability:</strong> <span id="probability">{{ (result.probability * 100) | round(2) }}</span>%</p>
+    </div>
+
+    <div class="flex justify-between">
+      <a href="{{ url_for('index') }}" class="text-blue-600 hover:underline">← Back to Dashboard</a>
+      <button onclick="downloadPDF()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Download PDF
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(16);
+      doc.text("CKD-CVD Risk Analysis Report", 20, 20);
+
+      doc.setFontSize(12);
+      doc.text("Patient Information", 20, 40);
+      doc.text("Name: {{ user.name }}", 20, 50);
+      doc.text("Email: {{ user.email }}", 20, 60);
+      doc.text("Gender: {{ user.gender }}", 20, 70);
+
+      doc.setFontSize(12);
+      doc.text("Prediction Result", 20, 90);
+      doc.text("Risk Level: {{ result.prediction }}", 20, 100);
+      doc.text("Probability: {{ (result.probability * 100) | round(2) }}%", 20, 110);
+
+      doc.save("prediction_result.pdf");
+    }
+  </script>
+</body>
+</html>

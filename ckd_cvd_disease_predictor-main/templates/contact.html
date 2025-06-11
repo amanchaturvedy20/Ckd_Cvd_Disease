@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Form</title>
+</head>
+<body>
+    <h1>Contact Us</h1>
+    <form method="POST">
+        <label>Username:</label><br>
+        <input type="text" name="username"><br>
+        <label>Topic:</label><br>
+        <input type="text" name="topic"><br>
+        <label>Query:</label><br>
+        <textarea name="query"></textarea><br>
+        <button type="submit">Send</button>
+    </form>
+    {% if message %}
+        <p style="color: green;">{{ message }}</p>
+    {% endif %}
+</body>
+</html>
